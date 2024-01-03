@@ -43,7 +43,7 @@ def input_task_index(task_list: list) -> int:
 def main(task_list):
     while True:
         print("---[ Tasks ]---")
-        print("9: Exit")
+        print("0: Exit")
         print("1: Print all tasks")
         print("11: Print only undone tasks")
         print("2: Add a task")
