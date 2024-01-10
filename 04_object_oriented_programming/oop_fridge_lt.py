@@ -17,6 +17,9 @@ class Recipe:
     ingredients = []
     instructions = []
 
+    def __str__(self):
+        return f"{self.ingredients}"
+
     def add_ingredient(self, product:Product):
         self.ingredients.append(product)
 
@@ -47,20 +50,95 @@ class Fridge:
             self.contents.append(Product(name, quantity))
 
     def remove_product(self, name:str, quantity:float):
-        pass
+        product_id, product = self.check_product(name)
+        if product == None or (product.quantity - quantity < 0):
+            return False
+        elif product.quantity - quantity == 0:
+            self.contents.pop(product_id)
+        else:
+            product.quantity -= quantity
+        return True
 
     def print_contents(self):
-        pass
+        for product in self.contents:
+            print(f"{product}")
 
     def check_recipe(self, recipe:Recipe):
-        pass
+        missing_product = []
+        for product_recipe in recipe.ingredients:
+            product_id, product_fridge = self.check_product(product_recipe.name)
+            if  product_fridge is not None:
+                missing_quantity = product_fridge.quantity - product_recipe.quantity
+                if missing_quantity < 0:
+                    missing_product.append(Product(product_recipe.name, missing_product))
+            else:
+                missing_product.append(product_recipe)
+        if len(missing_product) == 0:
+            print("Dinner come!")
+        else:
+            print(f"Lost products : {missing_product}")
 
 
-def main():
-    fridge = Fridge()
-    # meniukas | vartotojo sasaja
+def select(number_of_choices):
+    choice = ""
+    while not choice.isnumeric():
+        choice = input("    Jusu noras? : ")
+        if choice.isnumeric():
+            choice = int(choice)
+            if choice == 0:
+                print("Viso gero!")
+                exit()
+            elif choice <= number_of_choices:
+                return (choice)
+        print("Neteisingas noras, pabandyk dar karta")
+        choice = ""
 
-# apple = Product('apple', 1)
-# another_apple = Product('apple', 1)
 
-# print(apple == another_apple)
+fridge = Fridge()
+dinner = Recipe()
+
+while True:
+    print()
+    print("^=..=^  Šaldytuvas  ^=..=^")
+    print("  1: Pridėti produktą")
+    print("  2: Išimti produktą")
+    print("  3: Patikrinti kiekį šaldytuve")
+    print("  4: Išspausdinti šaldytuvo turinį")
+    print("  5: Sukurti receptą")
+    print("  6: Išimti produktą is receptą")
+    print("  7: Produktu kekį pakeisti receptoju")
+    print("  8: Perziureti receptą")
+    print("  9: Patikrinti receptą")
+    print("  0: Išeiti")
+    choice = select(9)
+    if choice == 1:
+        fridge.add_product(input("Name of product: "), float(input("Product quantity: ")))
+    elif choice == 2:
+        if fridge.remove_product(input("Name of product: "), 
+                                 float(input("Product quantity: "))):
+            print("Removed")
+        else:
+            print("Wrong product name or qauntity")
+    elif choice == 3:
+        product_id, product = fridge.check_product(input("Name of product: "))
+        if product is not None:
+            print(product.quantity)
+        else:
+            print(f"Fridge don't have that")   
+    elif choice == 4:
+        print(f"\n  === Fridge have : ===")
+        fridge.print_contents()
+    elif choice == 5:
+        how_many_product = int(input("How many products in recipe? : "))
+        for how in range(how_many_product):
+            dinner.add_ingredient(Product(input("Name of product: "), 
+                                 float(input("Product quantity: "))))
+    elif choice == 6:
+        dinner.remove_ingredient(int(input("Koki išimti? : "))-1)
+    elif choice == 7:
+        dinner.change_ingredient_quantity(int(input("Koki keisti? : "))-1, 
+                                          float(input("Nauja kieki :")))
+    elif choice == 8:
+        print(dinner)
+    elif choice == 9:
+        fridge.check_recipe(dinner)
