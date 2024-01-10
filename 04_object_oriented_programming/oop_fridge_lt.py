@@ -70,7 +70,7 @@ class Fridge:
             if  product_fridge is not None:
                 missing_quantity = product_fridge.quantity - product_recipe.quantity
                 if missing_quantity < 0:
-                    missing_product.append(Product(product_recipe.name, missing_product))
+                    missing_product.append(Product(product_recipe.name, float(missing_quantity*-1)))
             else:
                 missing_product.append(product_recipe)
         if len(missing_product) == 0:
