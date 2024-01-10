@@ -35,7 +35,9 @@ class Fridge:
 
     def check_product(self, product_name:str) -> (int, Product):
         for product_id, product in enumerate(self.contents):
-            if product.name == product_name:
+            if product.name == product_name:    
+                """product.name.upper() == product_name.upper()"""
+                """or product.name.lower() == product_name.lower()"""
                 return product_id, product
         return None, None
     
@@ -65,14 +67,14 @@ class Fridge:
 
     def check_recipe(self, recipe:Recipe):
         missing_product = []
-        for product_recipe in recipe.ingredients:
-            product_id, product_fridge = self.check_product(product_recipe.name)
+        for ingredient in recipe.ingredients:
+            product_id, product_fridge = self.check_product(ingredient.name)
             if  product_fridge is not None:
-                missing_quantity = product_fridge.quantity - product_recipe.quantity
+                missing_quantity = product_fridge.quantity - ingredient.quantity
                 if missing_quantity < 0:
-                    missing_product.append(Product(product_recipe.name, float(missing_quantity*-1)))
+                    missing_product.append(Product(ingredient.name, abs(missing_quantity)))
             else:
-                missing_product.append(product_recipe)
+                missing_product.append(ingredient)
         if len(missing_product) == 0:
             print("Dinner come!")
         else:
