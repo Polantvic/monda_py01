@@ -15,7 +15,7 @@ class Product:
 
 class Recipe:
     ingredients = []
-    instructions = []
+    #instructions = []
 
     def __str__(self):
         return f"{self.ingredients}"
@@ -35,17 +35,16 @@ class Fridge:
 
     def check_product(self, product_name:str) -> (int, Product):
         for product_id, product in enumerate(self.contents):
-            if product.name == product_name:    
-                """product.name.upper() == product_name.upper()"""
-                """or product.name.lower() == product_name.lower()"""
+            if product.name == product_name:
                 return product_id, product
         return None, None
     
-    def check_product_quantity(self, product:Product, quantity:float):
-        return product.quantity - quantity
+#    def check_product_quantity(self, product:Product, quantity:float):
+#        return product.quantity - quantity
 
     def add_product(self, name:str, quantity:float):
-        product_id, product = self.check_product(name) # nenaudojamus kintamuosius galima vadinti tiesiog _
+        # nenaudojamus kintamuosius galima vadinti tiesiog _
+        product_id, product = self.check_product(name)
         if product is not None:
             product.quantity += quantity
         else:
@@ -114,15 +113,15 @@ while True:
     print("  0: Išeiti")
     choice = select(9)
     if choice == 1:
-        fridge.add_product(input("Name of product: "), float(input("Product quantity: ")))
+        fridge.add_product(input("Name of product: ").lower(), float(input("Product quantity: ")))
     elif choice == 2:
-        if fridge.remove_product(input("Name of product: "), 
+        if fridge.remove_product(input("Name of product: ").lower(), 
                                  float(input("Product quantity: "))):
             print("Removed")
         else:
             print("Wrong product name or qauntity")
     elif choice == 3:
-        product_id, product = fridge.check_product(input("Name of product: "))
+        product_id, product = fridge.check_product(input("Name of product: ").lower())
         if product is not None:
             print(product.quantity)
         else:
@@ -133,7 +132,7 @@ while True:
     elif choice == 5:
         how_many_product = int(input("How many products in recipe? : "))
         for how in range(how_many_product):
-            dinner.add_ingredient(Product(input("Name of product: "), 
+            dinner.add_ingredient(Product(input("Name of product: ").lower(), 
                                  float(input("Product quantity: "))))
     elif choice == 6:
         dinner.remove_ingredient(int(input("Koki išimti? : "))-1)
