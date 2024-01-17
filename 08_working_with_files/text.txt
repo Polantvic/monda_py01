@@ -1,0 +1,10 @@
+# Open the text file for reading
+with open("changes.txt", "r") as file:
+    # Read a line from the file
+    line = file.readline()
+    
+    # Convert uppercase to lowercase and vice versa
+    modified_line = line.swapcase()
+    
+    # Print the modified line
+    print(modified_line)
